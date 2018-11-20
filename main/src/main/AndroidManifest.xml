@@ -40,36 +40,13 @@
                    android:resource="@xml/app_restrictions" />
 
         <activity
-            android:name=".activities.VPNPreferences"
-            android:exported="false"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
             android:name=".activities.DisconnectVPN"
             android:autoRemoveFromRecents="true"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=".DisconnectVPN"
             android:theme="@style/blinkt.dialog" />
-        <activity
-            android:name=".activities.LogWindow"
-            android:allowTaskReparenting="true"
-            android:label="@string/openvpn_log"
-            android:launchMode="singleTask" />
         <activity android:name=".activities.FileSelect" />
-        <activity
-            android:name=".activities.MainActivity"
-            tools:ignore="ExportedActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES"/>
-            </intent-filter>
-        </activity>
 
         <service
             android:name=".core.OpenVPNService"

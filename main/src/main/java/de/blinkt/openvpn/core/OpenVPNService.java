@@ -51,7 +51,6 @@ import de.blinkt.openvpn.LaunchVPN;
 import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.activities.DisconnectVPN;
-import de.blinkt.openvpn.activities.MainActivity;
 import de.blinkt.openvpn.api.ExternalAppDatabase;
 import de.blinkt.openvpn.core.VpnStatus.ByteCountListener;
 import de.blinkt.openvpn.core.VpnStatus.StateListener;
@@ -404,9 +403,10 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
     PendingIntent getGraphPendingIntent() {
         // Let the configure Button show the Log
-        Class activityClass = MainActivity.class;
+//        Class activityClass = MainActivity.class;
+        Class activityClass = mNotificationActivityClass;
         if (mNotificationActivityClass != null) {
-            activityClass = mNotificationActivityClass;
+//            activityClass = mNotificationActivityClass;
         }
         Intent intent = new Intent(getBaseContext(), activityClass);
         intent.putExtra("PAGE", "graph");
