@@ -468,14 +468,14 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fab_import:
-                startImportConfigFilePicker();
-                break;
-            case R.id.fab_add:
-                onAddOrDuplicateProfile(null);
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.fab_import:
+//                startImportConfigFilePicker();
+//                break;
+//            case R.id.fab_add:
+//                onAddOrDuplicateProfile(null);
+//                break;
+//        }
     }
 
     private boolean startImportConfigFilePicker() {

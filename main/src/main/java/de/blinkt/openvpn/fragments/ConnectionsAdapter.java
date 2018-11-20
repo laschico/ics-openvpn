@@ -245,20 +245,20 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
             mProxyGroup.setOnCheckedChangeListener((group, checkedId) -> {
                 if (mConnection != null) {
-                    switch (checkedId) {
-                        case R.id.proxy_none:
-                            mConnection.mProxyType = Connection.ProxyType.NONE;
-                            break;
-                        case R.id.proxy_http:
-                            mConnection.mProxyType = Connection.ProxyType.HTTP;
-                            break;
-                        case R.id.proxy_socks:
-                            mConnection.mProxyType = Connection.ProxyType.SOCKS5;
-                            break;
-                        case R.id.proxy_orbot:
-                            mConnection.mProxyType = Connection.ProxyType.ORBOT;
-                            break;
-                    }
+//                    switch (checkedId) {
+//                        case R.id.proxy_none:
+//                            mConnection.mProxyType = Connection.ProxyType.NONE;
+//                            break;
+//                        case R.id.proxy_http:
+//                            mConnection.mProxyType = Connection.ProxyType.HTTP;
+//                            break;
+//                        case R.id.proxy_socks:
+//                            mConnection.mProxyType = Connection.ProxyType.SOCKS5;
+//                            break;
+//                        case R.id.proxy_orbot:
+//                            mConnection.mProxyType = Connection.ProxyType.ORBOT;
+//                            break;
+//                    }
                     setVisibilityProxyServer(this, mConnection);
                 }
             });
