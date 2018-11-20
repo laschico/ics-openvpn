@@ -101,9 +101,9 @@ public class OpenSSLSpeed extends Activity {
         setContentView(R.layout.openssl_speed);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        findViewById(R.id.testSpecific).setOnClickListener((view) -> {
-            runAlgorithms(mCipher.getText().toString());
-        });
+//        findViewById(R.id.testSpecific).setOnClickListener((view) -> {
+//            runAlgorithms(mCipher.getText().toString());
+//        });
         mCipher = (EditText) findViewById(R.id.ciphername);
 
         mListView = findViewById(R.id.results);

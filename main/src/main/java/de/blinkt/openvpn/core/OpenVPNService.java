@@ -123,11 +123,19 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
 
     };
+    public interface ConfigIntentProvider {
+        Intent obtainConfigIntent(Context c);
+    }
+    public void setIntentProvider(ConfigIntentProvider intentProvider) {
+        mIntentProvider = intentProvider;
+    }
+    private ConfigIntentProvider mIntentProvider;
     private String mLastTunCfg;
     private String mRemoteGW;
     private Handler guiHandler;
     private Toast mlastToast;
     private Runnable mOpenVPNThread;
+    public static OpenVPNService Singleton;
 
     // From: http://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java
     public static String humanReadableByteCount(long bytes, boolean speed, Resources res) {
@@ -404,15 +412,16 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     PendingIntent getGraphPendingIntent() {
         // Let the configure Button show the Log
 //        Class activityClass = MainActivity.class;
-        Class activityClass = mNotificationActivityClass;
-        if (mNotificationActivityClass != null) {
+//        Class activityClass = mNotificationActivityClass;
+//        if (mNotificationActivityClass != null) {
 //            activityClass = mNotificationActivityClass;
-        }
-        Intent intent = new Intent(getBaseContext(), activityClass);
-        intent.putExtra("PAGE", "graph");
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//        }
+//        Intent intent = new Intent(getBaseContext(), activityClass);
+        Intent intent = mIntentProvider.obtainConfigIntent(this);
+//        intent.putExtra("PAGE", "graph");
+//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         PendingIntent startLW = PendingIntent.getActivity(this, 0, intent, 0);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         return startLW;
 
     }
@@ -680,6 +689,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     @Override
     public void onCreate() {
         super.onCreate();
+        Singleton = this;
     }
 
     @Override

@@ -70,7 +70,7 @@ public class VPNLaunchHelper {
     }
 
 
-    static String[] buildOpenvpnArgv(Context c) {
+    public static String[] buildOpenvpnArgv(Context c) {
         Vector<String> args = new Vector<>();
 
         String binaryName = writeMiniVPN(c);

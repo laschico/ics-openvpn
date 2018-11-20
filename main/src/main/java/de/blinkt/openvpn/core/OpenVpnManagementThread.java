@@ -48,11 +48,19 @@ public class OpenVpnManagementThread implements Runnable, OpenVPNManagement {
     private pauseReason lastPauseReason = pauseReason.noNetwork;
     private PausedStateCallback mPauseCallback;
     private boolean mShuttingDown;
-    private Runnable mResumeHoldRunnable = () -> {
-        if (shouldBeRunning()) {
-            releaseHoldCmd();
+    private Runnable mResumeHoldRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (shouldBeRunning()) {
+                releaseHoldCmd();
+            }
         }
     };
+//    private Runnable mResumeHoldRunnable = () -> {
+//        if (shouldBeRunning()) {
+//            releaseHoldCmd();
+//        }
+//    };
     private Runnable orbotStatusTimeOutRunnable = new Runnable() {
         @Override
         public void run() {

@@ -58,11 +58,11 @@ public class ShowConfigFragment extends Fragment {
 					e.printStackTrace();
 					configtext = "Error generating config file: " + e.getLocalizedMessage();
 				}
-				getActivity().runOnUiThread(() -> {
-                    cv.setText(configtext);
-					if (mfabButton!=null)
-                        mfabButton.setVisibility(View.VISIBLE);
-                });
+//				getActivity().runOnUiThread(() -> {
+//                    cv.setText(configtext);
+//					if (mfabButton!=null)
+//                        mfabButton.setVisibility(View.VISIBLE);
+//                });
 				
 				
 			}

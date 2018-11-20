@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.security.KeyChain;
+import android.security.KeyChainAliasCallback;
 import android.security.KeyChainException;
 import android.text.TextUtils;
 import android.view.View;
@@ -71,7 +72,13 @@ abstract class KeyChainSettingsFragment extends Settings_Fragment implements Vie
                 try {
                     Bundle b = ExtAuthHelper.getCertificateMetaData(getActivity(), mProfile.mExternalAuthenticator, mProfile.mAlias);
                     mProfile.mAlias = b.getString(ExtAuthHelper.EXTRA_ALIAS);
-                    getActivity().runOnUiThread(() -> setAlias());
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setAlias();
+                        }
+                    });
+//                    getActivity().runOnUiThread(() -> setAlias());
                 } catch (KeyChainException e) {
                     e.printStackTrace();
                 }
@@ -82,6 +89,7 @@ abstract class KeyChainSettingsFragment extends Settings_Fragment implements Vie
 
 
     protected void setCertificate(boolean external) {
+        final boolean extern = external;
         new Thread() {
             public void run() {
                 String certstr = "";
@@ -89,7 +97,7 @@ abstract class KeyChainSettingsFragment extends Settings_Fragment implements Vie
                 try {
                     X509Certificate cert;
 
-                    if (external) {
+                    if (extern) {
                         if (!TextUtils.isEmpty(mProfile.mExternalAuthenticator) && !TextUtils.isEmpty(mProfile.mAlias)) {
                             cert = ExtAuthHelper.getCertificateChain(getActivity(), mProfile.mExternalAuthenticator, mProfile.mAlias)[0];
                             metadata = ExtAuthHelper.getCertificateMetaData(getActivity(), mProfile.mExternalAuthenticator, mProfile.mAlias);
@@ -118,13 +126,21 @@ abstract class KeyChainSettingsFragment extends Settings_Fragment implements Vie
                 }
 
                 final String certStringCopy = certstr;
-                Bundle finalMetadata = metadata;
-                getActivity().runOnUiThread(() -> {
-                    mAliasCertificate.setText(certStringCopy);
-                    if (finalMetadata!=null)
-                        mExtAliasName.setText(finalMetadata.getString(ExtAuthHelper.EXTRA_DESCRIPTION));
-
+                final Bundle finalMetadata = metadata;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAliasCertificate.setText(certStringCopy);
+                        if (finalMetadata!=null)
+                            mExtAliasName.setText(finalMetadata.getString(ExtAuthHelper.EXTRA_DESCRIPTION));
+                    }
                 });
+//                getActivity().runOnUiThread(() -> {
+//                    mAliasCertificate.setText(certStringCopy);
+//                    if (finalMetadata!=null)
+//                        mExtAliasName.setText(finalMetadata.getString(ExtAuthHelper.EXTRA_DESCRIPTION));
+//
+//                });
 
             }
         }.start();
@@ -199,12 +215,19 @@ abstract class KeyChainSettingsFragment extends Settings_Fragment implements Vie
     @SuppressWarnings("WrongConstant")
     public void showCertDialog() {
         try {
-            KeyChain.choosePrivateKeyAlias(getActivity(),
-                    alias -> {
-                        // Credential alias selected.  Remember the alias selection for future use.
-                        mProfile.mAlias = alias;
-                        mHandler.sendEmptyMessage(UPDATE_ALIAS);
+            KeyChain.choosePrivateKeyAlias(getActivity(), new KeyChainAliasCallback() {
+                        @Override
+                        public void alias(String s) {
+                            // Credential alias selected.  Remember the alias selection for future use.
+                            mProfile.mAlias = s;
+                            mHandler.sendEmptyMessage(UPDATE_ALIAS);
+                        }
                     },
+//                    alias -> {
+//                        // Credential alias selected.  Remember the alias selection for future use.
+//                        mProfile.mAlias = alias;
+//                        mHandler.sendEmptyMessage(UPDATE_ALIAS);
+//                    },
                     new String[]{"RSA"}, // List of acceptable key types. null for any
                     null,                        // issuer, null for any
                     mProfile.mServerName,      // host name of server requesting the cert, null if unavailable
