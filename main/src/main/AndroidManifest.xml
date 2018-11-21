@@ -25,7 +25,6 @@
 
 
     <application
-        android:name=".core.ICSOpenVPNApplication"
         android:allowBackup="true"
         android:appCategory="productivity"
         android:banner="@mipmap/banner_tv"
@@ -50,15 +49,13 @@
 
         <service
             android:name=".core.OpenVPNService"
-            android:permission="android.permission.BIND_VPN_SERVICE"
-            android:process=":openvpn">
+            android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
         <service
             android:name=".api.ExternalOpenVPNService"
-            android:process=":openvpn"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="de.blinkt.openvpn.api.IOpenVPNAPIService" />
@@ -66,8 +63,7 @@
         </service>
         <service
             android:name=".core.OpenVPNStatusService"
-            android:exported="false"
-            android:process=":openvpn" />
+            android:exported="false"/>
         <service
             android:name=".OpenVPNTileService"
             android:icon="@drawable/ic_quick"
@@ -189,13 +185,6 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name=".FileProvider"
-            android:authorities="de.blinkt.openvpn.FileProvider"
-            android:exported="true"
-            android:grantUriPermissions="true"
-            tools:ignore="ExportedContentProvider" />
-
         <!--
         <receiver android:name="core.GetRestrictionReceiver">
             <intent-filter>
@@ -203,14 +192,14 @@
             </intent-filter>
         </receiver>
         -->
-        <activity
-            android:name=".activities.OpenSSLSpeed"
-            android:label="@string/title_activity_open_sslspeed"
-            android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.blinkt.openvpn.activities.MainActivity" />
-        </activity>
+        <!--<activity-->
+            <!--android:name=".activities.OpenSSLSpeed"-->
+            <!--android:label="@string/title_activity_open_sslspeed"-->
+            <!--android:parentActivityName=".activities.MainActivity">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="de.blinkt.openvpn.activities.MainActivity" />-->
+        <!--</activity>-->
         <activity
             android:name=".api.RemoteAction"
             />

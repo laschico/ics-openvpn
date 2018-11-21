@@ -94,9 +94,9 @@ public class SendDumpFragment extends Fragment  {
 		if(ldump==null) {
 			VpnStatus.logError("No Minidump found!");
 		}
-
-		uris.add(Uri.parse("content://de.blinkt.openvpn.FileProvider/" + ldump.first.getName()));
-		uris.add(Uri.parse("content://de.blinkt.openvpn.FileProvider/" + ldump.first.getName() + ".log"));
+//
+//		uris.add(Uri.parse("content://de.blinkt.openvpn.FileProvider/" + ldump.first.getName()));
+//		uris.add(Uri.parse("content://de.blinkt.openvpn.FileProvider/" + ldump.first.getName() + ".log"));
 
 		emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 		emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
