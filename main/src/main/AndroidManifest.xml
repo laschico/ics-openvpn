@@ -28,7 +28,6 @@
         android:allowBackup="true"
         android:appCategory="productivity"
         android:banner="@mipmap/banner_tv"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app"
         android:supportsRtl="true"
         android:theme="@style/blinkt"

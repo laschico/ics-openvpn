@@ -24,7 +24,7 @@ import de.blinkt.openvpn.VpnProfile;
 
 public class VpnStatus {
 
-
+    static  final String TAG="VpnStatus";
     private static final LinkedList<LogItem> logbuffer;
 
     private static Vector<LogListener> logListener;
@@ -391,11 +391,14 @@ public class VpnStatus {
     }
 
     public static void logInfo(String message) {
+
         newLogItem(new LogItem(LogLevel.INFO, message));
+        android.util.Log.i(TAG,message);
     }
 
     public static void logDebug(String message) {
         newLogItem(new LogItem(LogLevel.DEBUG, message));
+        android.util.Log.i(TAG,message);
     }
 
     public static void logInfo(int resourceId, Object... args) {
