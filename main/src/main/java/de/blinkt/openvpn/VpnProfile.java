@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.security.KeyChain;
 import android.security.KeyChainException;
@@ -61,7 +60,7 @@ public class VpnProfile implements Serializable, Cloneable {
     public static final String INLINE_TAG = "[[INLINE]]";
     public static final String DISPLAYNAME_TAG = "[[NAME]]";
     public static final int MAXLOGLEVEL = 4;
-    public static final int CURRENT_PROFILE_VERSION = 7;
+    public static final int CURRENT_PROFILE_VERSION = 8;
     public static final int DEFAULT_MSSFIX_SIZE = 1280;
     public static final int TYPE_CERTIFICATES = 0;
     public static final int TYPE_PKCS12 = 1;
@@ -164,6 +163,7 @@ public class VpnProfile implements Serializable, Cloneable {
     private UUID mUuid;
     private int mProfileVersion;
 
+    public boolean mBlockUnusedAddressFamilies =true;
 
     public VpnProfile(String name) {
         mUuid = UUID.randomUUID();
@@ -275,29 +275,36 @@ public class VpnProfile implements Serializable, Cloneable {
     }
 
     public void upgradeProfile() {
-        if (mProfileVersion < 2) {
-            /* default to the behaviour the OS used */
-            mAllowLocalLAN = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT;
-        }
 
-        if (mProfileVersion < 4) {
-            moveOptionsToConnection();
-            mAllowedAppsVpnAreDisallowed = true;
-        }
-        if (mAllowedAppsVpn == null)
-            mAllowedAppsVpn = new HashSet<>();
+        /* Fallthrough is intended here */
+        switch(mProfileVersion) {
+            case 0:
+            case 1:
+                /* default to the behaviour the OS used */
+                mAllowLocalLAN = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT;
+            case 2:
+            case 3:
+                moveOptionsToConnection();
+                mAllowedAppsVpnAreDisallowed = true;
 
-        if (mConnections == null)
-            mConnections = new Connection[0];
+                if (mAllowedAppsVpn == null)
+                    mAllowedAppsVpn = new HashSet<>();
 
-        if (mProfileVersion < 6) {
-            if (TextUtils.isEmpty(mProfileCreator))
-                mUserEditable = true;
-        }
-        if (mProfileVersion < 7) {
-            for (Connection c : mConnections)
-                if (c.mProxyType == null)
-                    c.mProxyType = Connection.ProxyType.NONE;
+                if (mConnections == null)
+                    mConnections = new Connection[0];
+            case 4:
+            case 5:
+
+                if (TextUtils.isEmpty(mProfileCreator))
+                    mUserEditable = true;
+            case 6:
+                for (Connection c : mConnections)
+                    if (c.mProxyType == null)
+                        c.mProxyType = Connection.ProxyType.NONE;
+            case 7:
+                if (mAllowAppVpnBypass)
+                    mBlockUnusedAddressFamilies = !mAllowAppVpnBypass;
+            default:
         }
 
         mProfileVersion = CURRENT_PROFILE_VERSION;
@@ -482,11 +489,14 @@ public class VpnProfile implements Serializable, Cloneable {
 
         if (mUseTLSAuth) {
             boolean useTlsCrypt = mTLSAuthDirection.equals("tls-crypt");
+            boolean useTlsCrypt2 = mTLSAuthDirection.equals("tls-crypt-v2");
 
             if (mAuthenticationType == TYPE_STATICKEYS)
                 cfg.append(insertFileData("secret", mTLSAuthFilename));
             else if (useTlsCrypt)
                 cfg.append(insertFileData("tls-crypt", mTLSAuthFilename));
+            else if (useTlsCrypt2)
+                cfg.append(insertFileData("tls-crypt-v2", mTLSAuthFilename));
             else
                 cfg.append(insertFileData("tls-auth", mTLSAuthFilename));
 
@@ -551,7 +561,10 @@ public class VpnProfile implements Serializable, Cloneable {
 
         if (mMssFix != 0) {
             if (mMssFix != 1450) {
-                cfg.append(String.format(Locale.US, "mssfix %d\n", mMssFix));
+                if (configForOvpn3)
+                    cfg.append(String.format(Locale.US, "mssfix %d mtu\n", mMssFix));
+                else
+                    cfg.append(String.format(Locale.US, "mssfix %d\n", mMssFix));
             } else
                 cfg.append("mssfix\n");
         }
