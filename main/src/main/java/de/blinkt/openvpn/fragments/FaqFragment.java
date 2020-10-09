@@ -193,7 +193,7 @@ public class FaqFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(columns, StaggeredGridLayoutManager.VERTICAL));
 
-        mRecyclerView.setAdapter(new FaqViewAdapter(getActivity(), getFAQEntries()));
+//        mRecyclerView.setAdapter(new FaqViewAdapter(getActivity(), getFAQEntries()));
 
         return v;
     }

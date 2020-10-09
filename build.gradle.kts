@@ -5,6 +5,8 @@
 
 
 buildscript {
+    var kotlin_version: String by extra
+    kotlin_version = "1.4.10"
     repositories {
         google()
         jcenter()
