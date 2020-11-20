@@ -13,9 +13,9 @@ import android.net.LocalSocketAddress;
 import android.os.Build;
 import android.os.Handler;
 import android.os.ParcelFileDescriptor;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.system.ErrnoException;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
 import android.system.Os;
 import android.util.Log;
 import de.blinkt.openvpn.R;
