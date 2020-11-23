@@ -31,7 +31,7 @@ dependencies {
     implementation ("com.android.support:cardview-v7:28.0.0")
     implementation ("com.android.support:recyclerview-v7:28.0.0")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.0.2")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.11")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10")
 
     testImplementation ("junit:junit:4.12")
     testImplementation ("org.mockito:mockito-core:2.16.0")
@@ -79,7 +79,7 @@ android {
 
     externalNativeBuild {
         cmake {
-            setPath(File("${projectDir}/src/main/cpp/CMakeLists.txt"))
+            path(File("${projectDir}/src/main/cpp/CMakeLists.txt"))
         }
     }
 
